@@ -1,0 +1,16 @@
+{$SITE_ADDRESS} {
+	tls internal
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+
+	handle /health {
+		reverse_proxy backend:8000
+	}
+
+	handle {
+		respond "Beca Alimentaria API" 200
+	}
+}

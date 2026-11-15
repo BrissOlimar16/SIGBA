@@ -1,0 +1,30 @@
+# Entornos y secretos
+.env
+.env.*
+!.env.example
+.venv/
+.venv-*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node/Angular
+node_modules/
+frontend/dist/
+frontend/.angular/
+npm-debug.log*
+
+# Datos biométricos y de prueba: NUNCA al repositorio
+fotos_calibracion/
+data/
+*.npy
+
+# Artefactos
+pgdata/
+backups/
+*.log
+caddy-root.crt
+.DS_Store
