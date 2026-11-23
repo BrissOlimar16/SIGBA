@@ -1,0 +1,151 @@
+<div class="space-y-5">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-lg font-bold text-texto">{{ MENSAJES.configuracion.titulo }}</h2>
+      <p class="mt-1 text-sm text-texto-suave">{{ MENSAJES.configuracion.descripcion }}</p>
+    </div>
+    <app-boton (activar)="guardar()"
+      ><app-icono nombre="guardar" [tamano]="16" />{{ MENSAJES.configuracion.guardar }}</app-boton
+    >
+  </div>
+
+  <div class="grid grid-cols-1 gap-5 xl:grid-cols-2">
+    <app-panel
+      [titulo]="MENSAJES.configuracion.horarios"
+      [subtitulo]="MENSAJES.configuracion.parametros"
+    >
+      <div class="grid grid-cols-2 gap-4 p-5">
+        <label class="text-sm font-semibold text-texto">
+          {{ MENSAJES.configuracion.inicioDesayuno }}
+          <input
+            type="time"
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal"
+            [value]="inicioDesayuno()"
+            (input)="inicioDesayuno.set($any($event.target).value)"
+          />
+        </label>
+        <label class="text-sm font-semibold text-texto">
+          {{ MENSAJES.configuracion.finDesayuno }}
+          <input
+            type="time"
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal"
+            [value]="finDesayuno()"
+            (input)="finDesayuno.set($any($event.target).value)"
+          />
+        </label>
+        <label class="text-sm font-semibold text-texto">
+          {{ MENSAJES.configuracion.inicioComida }}
+          <input
+            type="time"
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal"
+            [value]="inicioComida()"
+            (input)="inicioComida.set($any($event.target).value)"
+          />
+        </label>
+        <label class="text-sm font-semibold text-texto">
+          {{ MENSAJES.configuracion.finComida }}
+          <input
+            type="time"
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal"
+            [value]="finComida()"
+            (input)="finComida.set($any($event.target).value)"
+          />
+        </label>
+      </div>
+    </app-panel>
+
+    <app-panel
+      [titulo]="MENSAJES.configuracion.reconocimiento"
+      [subtitulo]="MENSAJES.configuracion.soloSuperadmin"
+    >
+      <div class="space-y-5 p-5">
+        <div>
+          <div class="mb-2 flex justify-between text-sm">
+            <label for="umbral" class="font-semibold text-texto">{{
+              MENSAJES.configuracion.umbral
+            }}</label>
+            <strong class="text-primario">{{ umbral() }}%</strong>
+          </div>
+          <input
+            id="umbral"
+            type="range"
+            min="50"
+            max="99"
+            class="w-full accent-primario"
+            [value]="umbral()"
+            (input)="actualizarUmbral($event)"
+          />
+          <p class="mt-2 text-xs leading-relaxed text-texto-suave">
+            {{ MENSAJES.configuracion.ayudaUmbral }}
+          </p>
+        </div>
+        <label
+          class="flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-texto"
+        >
+          {{ MENSAJES.configuracion.maximoFaltas }}
+          <input
+            type="number"
+            min="1"
+            max="12"
+            class="h-10 w-24 rounded-control border border-borde-control px-3 text-center"
+            [value]="maximoFaltas()"
+            (input)="actualizarNumero(maximoFaltas.set, $event)"
+          />
+        </label>
+      </div>
+    </app-panel>
+
+    <app-panel
+      [titulo]="MENSAJES.configuracion.terminal"
+      [subtitulo]="MENSAJES.configuracion.parametros"
+    >
+      <div class="space-y-4 p-5">
+        <label
+          class="flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-texto"
+        >
+          {{ MENSAJES.configuracion.cuentaRegresiva }}
+          <input
+            type="number"
+            class="h-10 w-24 rounded-control border border-borde-control px-3 text-center"
+            [value]="cuentaRegresiva()"
+            (input)="cuentaRegresiva.set($any($event.target).valueAsNumber)"
+          />
+        </label>
+        <label
+          class="flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-texto"
+        >
+          {{ MENSAJES.configuracion.fotogramas }}
+          <input
+            type="number"
+            class="h-10 w-24 rounded-control border border-borde-control px-3 text-center"
+            [value]="fotogramas()"
+            (input)="fotogramas.set($any($event.target).valueAsNumber)"
+          />
+        </label>
+        <label
+          class="flex flex-wrap items-center justify-between gap-3 text-sm font-semibold text-texto"
+        >
+          {{ MENSAJES.configuracion.mostrarResultado }}
+          <input
+            type="number"
+            class="h-10 w-24 rounded-control border border-borde-control px-3 text-center"
+            [value]="mostrarResultado()"
+            (input)="mostrarResultado.set($any($event.target).valueAsNumber)"
+          />
+        </label>
+      </div>
+    </app-panel>
+
+    <app-panel [titulo]="MENSAJES.configuracion.parametros" [subtitulo]="MENSAJES.fecha">
+      <div class="space-y-3 p-5 text-sm text-texto-suave">
+        <p>110742 · {{ MENSAJES.universidad }}</p>
+        <p>{{ MENSAJES.version }}</p>
+        @if (guardado()) {
+          <p class="rounded-lg bg-exito-tinte p-3 font-semibold text-exito-texto" role="status">
+            {{ MENSAJES.configuracion.guardado }}
+          </p>
+        }
+      </div>
+    </app-panel>
+  </div>
+</div>
