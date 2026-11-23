@@ -1,0 +1,153 @@
+<div class="space-y-6">
+  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    @for (metrica of metricas; track metrica.etiqueta) {
+      <app-tarjeta-metrica
+        [etiqueta]="metrica.etiqueta"
+        [valor]="metrica.valor"
+        [detalle]="metrica.detalle"
+        [icono]="metrica.icono"
+        [tono]="metrica.tono"
+        [tendencia]="metrica.tendencia"
+      />
+    }
+  </section>
+
+  <section class="grid grid-cols-1 gap-5 xl:grid-cols-[1.6fr_1fr]">
+    <app-panel [titulo]="MENSAJES.inicio.entregasHoy" [subtitulo]="MENSAJES.inicio.seguimiento">
+      <div accion class="flex rounded-lg bg-fondo p-1">
+        <button
+          type="button"
+          class="rounded-md px-3 py-1.5 text-xs font-semibold"
+          [class.bg-superficie]="comida() === 'desayuno'"
+          [class.text-primario]="comida() === 'desayuno'"
+          [class.text-texto-suave]="comida() !== 'desayuno'"
+          (click)="comida.set('desayuno')"
+        >
+          {{ MENSAJES.inicio.desayuno }}
+        </button>
+        <button
+          type="button"
+          class="rounded-md px-3 py-1.5 text-xs font-semibold"
+          [class.bg-superficie]="comida() === 'comida'"
+          [class.text-primario]="comida() === 'comida'"
+          [class.text-texto-suave]="comida() !== 'comida'"
+          (click)="comida.set('comida')"
+        >
+          {{ MENSAJES.inicio.comida }}
+        </button>
+      </div>
+      <div class="space-y-6 p-5">
+        @for (fila of entregas(); track fila.nombre) {
+          <div>
+            <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-sm font-semibold text-texto">
+                <app-icono nombre="edificio" [tamano]="16" />{{ fila.nombre }}
+              </div>
+              <span class="text-sm font-bold tabular-nums text-texto">
+                {{ fila.count
+                }}<span class="font-normal text-texto-suave"> / {{ fila.total }}</span>
+              </span>
+            </div>
+            <div class="h-2.5 overflow-hidden rounded-full bg-fondo">
+              <div
+                class="h-full rounded-full"
+                [class]="fila.color"
+                [style.width.%]="porcentaje(fila.count, fila.total)"
+              ></div>
+            </div>
+            <p class="mt-1.5 text-xs text-texto-suave">
+              {{ porcentaje(fila.count, fila.total) }}{{ MENSAJES.inicio.porcentajeEntregas }}
+            </p>
+          </div>
+        }
+      </div>
+    </app-panel>
+
+    <app-panel
+      [titulo]="MENSAJES.inicio.estadoTerminales"
+      [subtitulo]="MENSAJES.inicio.conexionTiempoReal"
+    >
+      <div accion class="flex items-center gap-1.5 text-xs font-semibold text-exito-texto">
+        <span class="size-2 rounded-full bg-exito"></span>{{ MENSAJES.inicio.sistemaOperativo }}
+      </div>
+      <div class="divide-y divide-borde">
+        @for (terminal of terminales; track terminal.nombre) {
+          <div class="flex items-center justify-between gap-3 px-5 py-4">
+            <div class="flex min-w-0 items-center gap-3">
+              <span
+                class="grid size-9 shrink-0 place-items-center rounded-lg"
+                [class]="
+                  terminal.enLinea
+                    ? 'bg-exito-tinte text-exito-texto'
+                    : 'bg-error-tinte text-error-texto'
+                "
+              >
+                <app-icono [nombre]="terminal.enLinea ? 'wifi' : 'sin-wifi'" [tamano]="17" />
+              </span>
+              <div class="min-w-0">
+                <p class="truncate text-sm font-semibold text-texto">{{ terminal.nombre }}</p>
+                <p class="mt-0.5 truncate text-xs text-texto-suave">{{ terminal.tiempo }}</p>
+              </div>
+            </div>
+            <app-distintivo-estado [tipo]="terminal.enLinea ? 'exito' : 'error'">
+              {{ terminal.enLinea ? MENSAJES.inicio.enLinea : MENSAJES.inicio.desconectada }}
+            </app-distintivo-estado>
+          </div>
+        }
+      </div>
+      <div class="m-4 rounded-lg bg-info-tinte p-3 text-xs leading-relaxed text-info-texto">
+        <span class="font-bold">i</span
+        ><span class="ml-2">{{ MENSAJES.inicio.ultimaSincronizacion }}</span>
+      </div>
+    </app-panel>
+  </section>
+
+  <section class="grid grid-cols-1 gap-5 xl:grid-cols-[1.6fr_1fr]">
+    <app-panel
+      [titulo]="MENSAJES.inicio.ultimasIncidencias"
+      [subtitulo]="MENSAJES.inicio.actividadReciente"
+    >
+      <button accion type="button" class="text-xs font-semibold text-primario hover:underline">
+        {{ MENSAJES.inicio.verTodas }}
+      </button>
+      <div class="divide-y divide-borde">
+        @for (incidencia of MENSAJES.inicio.incidencias; track incidencia[0]) {
+          <div class="flex items-center gap-4 px-5 py-3.5">
+            <time class="w-12 shrink-0 text-xs font-semibold tabular-nums text-texto-suave">{{
+              incidencia[0]
+            }}</time>
+            <span class="size-2 shrink-0 rounded-full bg-advertencia"></span>
+            <div class="min-w-0 flex-1">
+              <p class="truncate text-sm font-semibold text-texto">{{ incidencia[1] }}</p>
+              <p class="mt-0.5 truncate text-xs text-texto-suave">{{ incidencia[2] }}</p>
+            </div>
+            <app-icono nombre="derecha" [tamano]="17" />
+          </div>
+        }
+      </div>
+    </app-panel>
+
+    <app-panel [titulo]="MENSAJES.inicio.resumenPeriodo" [subtitulo]="MENSAJES.periodo">
+      <div class="space-y-4 p-5">
+        @for (item of resumen; track item.etiqueta) {
+          <div class="flex flex-wrap items-center justify-between gap-2 text-sm">
+            <span class="text-texto-suave">{{ item.etiqueta }}</span>
+            <strong class="text-texto">{{ item.valor }}</strong>
+          </div>
+        }
+        <div class="border-t border-borde pt-4">
+          <div class="mb-2 flex justify-between text-xs">
+            <span class="text-texto-suave">{{ MENSAJES.inicio.cupoTotal }}</span>
+            <span class="font-bold text-primario">96%</span>
+          </div>
+          <div class="h-2 rounded-full bg-fondo">
+            <div class="h-full w-[96%] rounded-full bg-primario"></div>
+          </div>
+        </div>
+        <app-boton variante="secundario" clase="w-full justify-between">
+          {{ MENSAJES.inicio.verPeriodo }}<app-icono nombre="derecha" [tamano]="16" />
+        </app-boton>
+      </div>
+    </app-panel>
+  </section>
+</div>
