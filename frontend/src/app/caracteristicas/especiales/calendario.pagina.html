@@ -1,0 +1,108 @@
+<div class="grid grid-cols-1 gap-5 xl:grid-cols-[1.5fr_0.9fr]">
+  <app-panel [titulo]="MENSAJES.calendario.servicios" [subtitulo]="MENSAJES.calendario.mes">
+    <div accion>
+      <app-boton
+        ><app-icono nombre="mas" [tamano]="16" />{{ MENSAJES.calendario.agregarFecha }}</app-boton
+      >
+    </div>
+    <div class="p-4 sm:p-5">
+      <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-bold text-texto-suave sm:gap-2">
+        @for (dia of diasSemana; track $index) {
+          <span class="py-2">{{ dia }}</span>
+        }
+      </div>
+      <div class="grid grid-cols-7 gap-1.5 sm:gap-2">
+        @for (dia of casillas; track $index) {
+          @if (dia === null) {
+            <span></span>
+          } @else {
+            <button
+              type="button"
+              [class]="clasesDia(dia)"
+              [attr.aria-label]="'Día ' + dia"
+              (click)="seleccionar(dia)"
+            >
+              {{ dia }}
+              @if (marca(dia)) {
+                <span class="absolute bottom-1 size-1.5 rounded-full bg-current"></span>
+              }
+            </button>
+          }
+        }
+      </div>
+      <div
+        class="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-borde pt-4 text-xs text-texto-suave"
+      >
+        @for (etiqueta of MENSAJES.calendario.leyenda; track etiqueta; let indice = $index) {
+          <span class="flex items-center gap-2">
+            <span
+              class="size-3 rounded-full"
+              [class]="
+                indice === 0
+                  ? 'bg-error'
+                  : indice === 1
+                    ? 'bg-advertencia'
+                    : indice === 2
+                      ? 'bg-primario'
+                      : 'bg-info'
+              "
+            ></span>
+            {{ etiqueta }}
+          </span>
+        }
+      </div>
+    </div>
+  </app-panel>
+
+  <div class="space-y-5">
+    <app-panel [titulo]="MENSAJES.calendario.agregarFecha" [subtitulo]="MENSAJES.fechaLarga">
+      <div class="space-y-4 p-5 text-sm">
+        <label class="block font-semibold text-texto">
+          {{ MENSAJES.calendario.diaRango }}
+          <input
+            type="text"
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal outline-none focus:border-primario"
+            value="20 nov — 24 nov 2026"
+          />
+        </label>
+        <label class="block font-semibold text-texto">
+          {{ MENSAJES.calendario.tipo }}
+          <select
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal"
+          >
+            @for (tipo of MENSAJES.calendario.tipos; track tipo) {
+              <option>{{ tipo }}</option>
+            }
+          </select>
+        </label>
+        <label class="block font-semibold text-texto">
+          {{ MENSAJES.calendario.motivo }}
+          <textarea
+            rows="3"
+            class="mt-1.5 w-full rounded-control border border-borde-control bg-superficie p-3 font-normal outline-none focus:border-primario"
+            [placeholder]="MENSAJES.calendario.describeMotivo"
+          ></textarea>
+        </label>
+        <app-boton clase="w-full"
+          ><app-icono nombre="mas" [tamano]="16" />{{ MENSAJES.calendario.agregar }}</app-boton
+        >
+      </div>
+    </app-panel>
+
+    <app-panel
+      [titulo]="MENSAJES.calendario.accionesServicio"
+      [subtitulo]="MENSAJES.calendario.vistaPrevia"
+    >
+      <div class="flex flex-col gap-3 p-5">
+        <app-boton variante="secundario" clase="justify-start"
+          ><app-icono nombre="pausa" [tamano]="16" />{{ MENSAJES.calendario.suspender }}</app-boton
+        >
+        <app-boton variante="secundario" clase="justify-start"
+          ><app-icono nombre="alerta" [tamano]="16" />{{
+            MENSAJES.calendario.contingencia
+          }}</app-boton
+        >
+      </div>
+    </app-panel>
+  </div>
+</div>
