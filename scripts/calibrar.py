@@ -16,6 +16,8 @@ MODELS = ROOT / "backend" / "models"
 YUNET = MODELS / "face_detection_yunet_2026may.onnx"
 SFACE = MODELS / "face_recognition_sface_2021dec.onnx"
 COSINE = getattr(cv2, "FaceRecognizerSF_FR_COSINE", 0)
+DETECT_CONF = 0.7
+MAX_LADO = 960
 
 
 def main() -> None:
@@ -23,7 +25,9 @@ def main() -> None:
         raise SystemExit("Uso: python scripts/calibrar.py CARPETA_FOTOS")
     carpeta = Path(sys.argv[1])
 
-    detector = cv2.FaceDetectorYN.create(str(YUNET), "", (320, 320), 0.9, 0.3, 5000)
+    detector = cv2.FaceDetectorYN.create(
+        str(YUNET), "", (320, 320), DETECT_CONF, 0.3, 5000
+    )
     recognizer = cv2.FaceRecognizerSF.create(str(SFACE), "")
 
     personas: dict[str, list[np.ndarray]] = {}
@@ -34,11 +38,20 @@ def main() -> None:
             if img is None:
                 continue
             h, w = img.shape[:2]
+            escala = min(1.0, MAX_LADO / max(h, w))
+            if escala < 1.0:
+                img = cv2.resize(
+                    img,
+                    (int(w * escala), int(h * escala)),
+                    interpolation=cv2.INTER_AREA,
+                )
+            h, w = img.shape[:2]
             detector.setInputSize((w, h))
             _, faces = detector.detect(img)
             if faces is None or len(faces) != 1:
                 print(f"  omitida (rostros detectados != 1): {ruta}")
                 continue
+            print(f"  aceptada (conf={float(faces[0][14]):.3f}): {ruta.name}")
             feats.append(recognizer.feature(recognizer.alignCrop(img, faces[0])).copy())
         if len(feats) >= 2:
             personas[d.name] = feats
