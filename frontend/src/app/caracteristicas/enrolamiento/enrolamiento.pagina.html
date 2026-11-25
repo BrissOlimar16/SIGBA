@@ -1,0 +1,83 @@
+<div class="grid grid-cols-1 gap-5 xl:grid-cols-[0.85fr_1.5fr_0.85fr]">
+  <app-panel
+    [titulo]="MENSAJES.enrolamiento.buscarAlumno"
+    [subtitulo]="MENSAJES.enrolamiento.pasoUno"
+  >
+    <div class="space-y-4 p-5">
+      <label class="relative block">
+        <span class="absolute left-3 top-3 text-texto-suave"
+          ><app-icono nombre="buscar" [tamano]="17"
+        /></span>
+        <input
+          type="search"
+          class="h-10 w-full rounded-control border border-borde-control bg-superficie pl-10 pr-3 text-sm outline-none focus:border-primario"
+          [attr.aria-label]="MENSAJES.enrolamiento.nombreMatricula"
+          [placeholder]="MENSAJES.enrolamiento.nombreMatricula"
+        />
+      </label>
+      <div class="rounded-lg border border-borde bg-fondo p-3">
+        <p class="text-sm font-bold">María Fernanda García</p>
+        <p class="mt-1 text-xs text-texto-suave">202410284 · Medicina</p>
+        <div class="mt-2">
+          <app-distintivo-estado tipo="exito">{{
+            MENSAJES.enrolamiento.becaActiva
+          }}</app-distintivo-estado>
+        </div>
+      </div>
+      <label class="flex items-start gap-2 text-xs leading-relaxed">
+        <input
+          type="checkbox"
+          class="mt-0.5 size-4 accent-primario"
+          [checked]="consentimiento()"
+          (change)="consentimiento.set(!consentimiento())"
+        />
+        {{ MENSAJES.enrolamiento.consentimiento }}
+      </label>
+    </div>
+  </app-panel>
+
+  <app-panel
+    [titulo]="MENSAJES.enrolamiento.vistaCamara"
+    [subtitulo]="MENSAJES.enrolamiento.alinear"
+  >
+    <div class="m-5 grid h-64 place-items-center rounded-xl bg-primario-oscuro sm:h-[310px]">
+      <div
+        class="grid size-44 place-items-center rounded-[50%] border-2 border-dashed border-white/70 text-white/70 sm:size-52"
+      >
+        <app-icono nombre="camara" [tamano]="48" />
+      </div>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3 px-5 pb-5">
+      <app-boton variante="secundario" (activar)="capturas.set(0)">
+        <app-icono nombre="repetir" [tamano]="16" />{{ MENSAJES.enrolamiento.repetirCaptura }}
+      </app-boton>
+      <app-boton (activar)="capturar()"
+        ><app-icono nombre="camara" [tamano]="16" />{{ MENSAJES.enrolamiento.capturar }}</app-boton
+      >
+    </div>
+  </app-panel>
+
+  <app-panel [titulo]="tituloCapturas()" [subtitulo]="MENSAJES.enrolamiento.calidad">
+    <div class="space-y-3 p-5">
+      @for (control of MENSAJES.enrolamiento.controles; track control; let indice = $index) {
+        <p class="flex items-center gap-2 text-sm text-texto-suave">
+          <span
+            class="grid size-5 place-items-center rounded-full bg-fondo"
+            [class.text-exito-texto]="indice < capturas()"
+          >
+            <app-icono [nombre]="indice < capturas() ? 'correcto' : 'reloj'" [tamano]="12" />
+          </span>
+          {{ control }}
+        </p>
+      }
+      <app-boton variante="secundario" clase="w-full" (activar)="guardar()">{{
+        MENSAJES.enrolamiento.guardar
+      }}</app-boton>
+      @if (mensaje()) {
+        <p class="rounded-lg bg-info-tinte p-3 text-xs text-info-texto" role="status">
+          {{ mensaje() }}
+        </p>
+      }
+    </div>
+  </app-panel>
+</div>

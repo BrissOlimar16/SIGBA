@@ -1,0 +1,87 @@
+<div class="space-y-5">
+  <a
+    routerLink="/admin/alumnos"
+    class="flex items-center gap-2 text-sm font-semibold text-primario"
+  >
+    <app-icono nombre="izquierda" [tamano]="17" />{{ MENSAJES.alumnos.volver }}
+  </a>
+
+  <app-panel [titulo]="MENSAJES.alumnos.ficha">
+    <div accion>
+      <app-boton variante="secundario"
+        ><app-icono nombre="editar" [tamano]="15" />{{ MENSAJES.alumnos.editarDatos }}</app-boton
+      >
+    </div>
+    <div class="flex flex-col gap-5 p-4 sm:flex-row sm:items-start sm:p-6">
+      <span
+        class="grid size-16 shrink-0 place-items-center rounded-2xl bg-primario-tinte text-lg font-bold text-primario"
+      >
+        {{ alumno.iniciales }}
+      </span>
+      <div class="min-w-0 flex-1">
+        <h2 class="text-xl font-bold">{{ alumno.nombre }}</h2>
+        <p class="mt-1 text-sm text-texto-suave">
+          Matrícula {{ alumno.matricula }} · {{ MENSAJES.alumnos.credencial }}
+        </p>
+        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <span
+            ><span class="text-texto-suave">{{ MENSAJES.alumnos.carrera }} </span
+            ><b>{{ alumno.carrera }}</b></span
+          >
+          <span
+            ><span class="text-texto-suave">{{ MENSAJES.alumnos.cafeteria }} </span
+            ><b>{{ alumno.cafeteria }}</b></span
+          >
+          <span
+            ><span class="text-texto-suave">{{ MENSAJES.alumnos.periodo }} </span
+            ><b>{{ MENSAJES.periodo }}</b></span
+          >
+        </div>
+      </div>
+      <app-distintivo-estado tipo="exito">Beca activa</app-distintivo-estado>
+    </div>
+  </app-panel>
+
+  <app-panel [titulo]="MENSAJES.alumnos.faltasPeriodo + ' · ' + alumno.faltas + '/6'">
+    <div class="p-5">
+      <div class="h-3 overflow-hidden rounded-full bg-fondo">
+        <div
+          class="h-full rounded-full bg-advertencia"
+          [style.width.%]="(alumno.faltas / 6) * 100"
+        ></div>
+      </div>
+      <p class="mt-2 text-sm text-texto-suave">
+        {{ 6 - alumno.faltas }} {{ MENSAJES.alumnos.faltasRestantes }}
+      </p>
+    </div>
+  </app-panel>
+
+  <app-panel [titulo]="MENSAJES.alumnos.historialEntregas">
+    <div accion class="flex flex-wrap gap-2">
+      <app-boton variante="secundario">{{ MENSAJES.alumnos.justificarFaltas }}</app-boton>
+      <app-boton variante="secundario">{{ MENSAJES.alumnos.cambiarCafeteria }}</app-boton>
+    </div>
+    <div class="p-5">
+      <div
+        class="flex flex-wrap gap-4 overflow-x-auto border-b border-borde pb-3 text-sm font-semibold"
+      >
+        @for (pestana of pestanas; track pestana; let indice = $index) {
+          <button
+            type="button"
+            class="whitespace-nowrap pb-3"
+            [class.border-b-2]="pestanaActiva() === indice"
+            [class.border-primario]="pestanaActiva() === indice"
+            [class.text-primario]="pestanaActiva() === indice"
+            [class.text-texto-suave]="pestanaActiva() !== indice"
+            (click)="pestanaActiva.set(indice)"
+          >
+            {{ pestana }}
+          </button>
+        }
+      </div>
+      <p class="py-8 text-center text-sm text-texto-suave">
+        {{ MENSAJES.alumnos.actividadReciente }}
+      </p>
+    </div>
+  </app-panel>
+</div>

@@ -1,0 +1,286 @@
+import { MENSAJES } from './mensajes.es';
+import { Alumno, EnlaceNavegacion, MetricaMaqueta, TablaMaqueta } from './modelos';
+
+export const NAVEGACION: EnlaceNavegacion[] = [
+  { etiqueta: MENSAJES.navegacion[0], ruta: '/admin/inicio', icono: 'panel' },
+  { etiqueta: MENSAJES.navegacion[1], ruta: '/admin/alumnos', icono: 'alumnos' },
+  { etiqueta: MENSAJES.navegacion[2], ruta: '/admin/enrolamiento', icono: 'rostro' },
+  { etiqueta: MENSAJES.navegacion[3], ruta: '/admin/lista-espera', icono: 'espera' },
+  {
+    etiqueta: MENSAJES.navegacion[4],
+    ruta: '/admin/bajas-alertas',
+    icono: 'alerta',
+    insignia: '8',
+  },
+  { etiqueta: MENSAJES.navegacion[5], ruta: '/admin/casos', icono: 'casos', insignia: '3' },
+  { etiqueta: MENSAJES.navegacion[6], ruta: '/admin/justificaciones', icono: 'justificaciones' },
+  { etiqueta: MENSAJES.navegacion[7], ruta: '/admin/calendario', icono: 'calendario' },
+  { etiqueta: MENSAJES.navegacion[8], ruta: '/admin/periodos', icono: 'periodos' },
+  { etiqueta: MENSAJES.navegacion[9], ruta: '/admin/reportes', icono: 'reportes' },
+  { etiqueta: MENSAJES.navegacion[10], ruta: '/admin/usuarios', icono: 'usuarios' },
+  { etiqueta: MENSAJES.navegacion[11], ruta: '/admin/configuracion', icono: 'configuracion' },
+  { etiqueta: MENSAJES.navegacion[12], ruta: '/admin/bitacora', icono: 'bitacora' },
+];
+
+export const ALUMNOS: Alumno[] = [
+  {
+    matricula: '202410284',
+    nombre: 'María Fernanda García López',
+    iniciales: 'MG',
+    carrera: 'Medicina',
+    cafeteria: 'Cafetería 1',
+    estado: 'Activa',
+    faltas: 3,
+    rostro: true,
+  },
+  {
+    matricula: '202310156',
+    nombre: 'José Luis Hernández Ruiz',
+    iniciales: 'JH',
+    carrera: 'Ingeniería Civil',
+    cafeteria: 'Cafetería 2',
+    estado: 'Activa',
+    faltas: 5,
+    rostro: true,
+  },
+  {
+    matricula: '202510492',
+    nombre: 'Ana Paula Martínez Cruz',
+    iniciales: 'AM',
+    carrera: 'Enfermería',
+    cafeteria: 'Cafetería 1',
+    estado: 'Pendiente de enrolamiento',
+    faltas: 0,
+    rostro: false,
+  },
+  {
+    matricula: '202210087',
+    nombre: 'Carlos Eduardo Pérez Díaz',
+    iniciales: 'CP',
+    carrera: 'Derecho',
+    cafeteria: 'Cafetería 2',
+    estado: 'Suspendida',
+    faltas: 6,
+    rostro: true,
+  },
+  {
+    matricula: '202410318',
+    nombre: 'Sofía Isabel López Santiago',
+    iniciales: 'SL',
+    carrera: 'Arquitectura',
+    cafeteria: 'Cafetería 1',
+    estado: 'Activa',
+    faltas: 2,
+    rostro: true,
+  },
+];
+
+export const METRICAS: MetricaMaqueta[] = [
+  {
+    etiqueta: MENSAJES.inicio.entregasHoy,
+    valor: '422',
+    detalle: MENSAJES.inicio.deEsperadas,
+    icono: 'utensilios',
+    tono: 'azul',
+    tendencia: '12%',
+  },
+  {
+    etiqueta: MENSAJES.inicio.alumnosRiesgo,
+    valor: '18',
+    detalle: MENSAJES.inicio.conFaltas,
+    icono: 'campana',
+    tono: 'ambar',
+  },
+  {
+    etiqueta: MENSAJES.inicio.bajasPendientes,
+    valor: '4',
+    detalle: MENSAJES.inicio.requierenRevision,
+    icono: 'usuarios',
+    tono: 'rojo',
+  },
+  {
+    etiqueta: MENSAJES.inicio.casosAbiertos,
+    valor: '7',
+    detalle: MENSAJES.inicio.nuevosHoy,
+    icono: 'casos',
+    tono: 'verde',
+  },
+];
+
+export const PAGINAS_GENERICAS: Record<string, TablaMaqueta> = {
+  'Lista de espera': {
+    titulo: 'Lista de espera',
+    descripcion: 'Gestiona las solicitudes de beca en el orden definido por la comisión.',
+    columnas: ['Posición', 'Nombre', 'Matrícula', 'Teléfono', 'Carrera', 'Estado'],
+    filas: [
+      ['01', 'Daniela Ruiz Santiago', '202510043', '951 234 5678', 'Nutrición', 'En espera'],
+      ['02', 'Miguel Ángel Santos', '202410221', '951 345 6789', 'Contaduría', 'En espera'],
+      ['03', 'Rosa Elena Díaz', '—', '951 456 7890', 'Pedagogía', 'En espera'],
+    ],
+    icono: 'espera',
+    accion: 'Agregar alumno',
+  },
+  'Bajas y alertas': {
+    titulo: 'Bajas y alertas',
+    descripcion: 'Atiende alumnos en riesgo y revisa las bajas pendientes de confirmación.',
+    columnas: ['Alumno', 'Matrícula', 'Cafetería', 'Faltas', 'Última falta', 'Acción'],
+    filas: [
+      [
+        'José Luis Hernández Ruiz',
+        '202310156',
+        'Cafetería 2',
+        '5 de 6',
+        '14 nov 2026',
+        'Marcar atendida',
+      ],
+      [
+        'Carlos Eduardo Pérez Díaz',
+        '202210087',
+        'Cafetería 2',
+        '6 de 6',
+        '13 nov 2026',
+        'Confirmar baja',
+      ],
+      ['Luis Alberto Cruz', '202310422', 'Cafetería 1', '5 de 6', '12 nov 2026', 'Marcar atendida'],
+    ],
+    icono: 'alerta',
+    accion: 'Revisar alertas',
+  },
+  Casos: {
+    titulo: 'Casos de atención',
+    descripcion: 'Alumnos que no pudieron completar su acceso al comedor.',
+    columnas: ['Hora', 'Alumno', 'Cafetería', 'Resultado', 'Puntaje', 'Atención'],
+    filas: [
+      ['10:42', 'Marta Isabel Cruz', 'Cafetería 1', 'Rostro no coincide', '42%', 'Revisar rostro'],
+      ['10:18', 'Pedro Sánchez Ruiz', 'Cafetería 2', 'Código no encontrado', '—', 'Buscar alumno'],
+      ['09:56', 'Ana Paula Martínez', 'Cafetería 1', 'Vivacidad fallida', '—', 'Volver a capturar'],
+    ],
+    icono: 'casos',
+    accion: 'Abrir caso',
+  },
+  Justificaciones: {
+    titulo: 'Justificaciones',
+    descripcion: 'Registra permisos y revisa las faltas que pueden justificarse.',
+    columnas: ['Folio', 'Alumno', 'Inicio', 'Fin', 'Faltas justificadas', 'Registrada por'],
+    filas: [
+      ['PER-2026-084', 'Marta Isabel Cruz', '10 nov 2026', '12 nov 2026', '4', 'Ana López'],
+      ['PER-2026-083', 'Jorge Pérez Díaz', '06 nov 2026', '06 nov 2026', '1', 'Ana López'],
+      ['PER-2026-081', 'Sofía López Santiago', '02 nov 2026', '03 nov 2026', '2', 'Luis Martínez'],
+    ],
+    icono: 'justificaciones',
+    accion: 'Nueva justificación',
+  },
+  Periodos: {
+    titulo: 'Periodos y becas',
+    descripcion: 'Administra los ciclos de beca y el cupo de cada cafetería.',
+    columnas: [
+      'Periodo',
+      'Tipo',
+      'Fechas del periodo',
+      'Vigencia de beca',
+      'Cupo C1 / C2',
+      'Estado',
+    ],
+    filas: [
+      [
+        'Semestre 2026-2',
+        'Semestre',
+        '03 ago — 18 dic 2026',
+        '03 ago — 18 dic 2026',
+        '500 / 500',
+        'Activo',
+      ],
+      [
+        'Verano 2026',
+        'Curso propedéutico',
+        '15 jun — 31 jul 2026',
+        '15 jun — 31 jul 2026',
+        '120 / 120',
+        'Cerrado',
+      ],
+      [
+        'Semestre 2026-1',
+        'Semestre',
+        '02 feb — 26 jun 2026',
+        '02 feb — 26 jun 2026',
+        '480 / 480',
+        'Cerrado',
+      ],
+    ],
+    icono: 'periodos',
+    accion: 'Crear periodo',
+  },
+  Usuarios: {
+    titulo: 'Usuarios del sistema',
+    descripcion: 'Administra cuentas y permisos de acceso a SIGBA.',
+    columnas: ['Usuario', 'Correo', 'Rol', 'Cafetería', 'Último acceso', 'Estado'],
+    filas: [
+      [
+        'Ana López Martínez',
+        'ana.lopez@uni-oax.mx',
+        'Administradora',
+        'Ambas',
+        'Hoy, 10:42',
+        'Activo',
+      ],
+      [
+        'Luis Martínez Cruz',
+        'luis.m@uni-oax.mx',
+        'Operador',
+        'Cafetería 1',
+        'Hoy, 09:15',
+        'Activo',
+      ],
+      [
+        'Marta Ruiz Santiago',
+        'marta.r@uni-oax.mx',
+        'Operadora',
+        'Cafetería 2',
+        'Ayer, 15:32',
+        'Activo',
+      ],
+    ],
+    icono: 'usuarios',
+    accion: 'Crear usuario',
+  },
+  Bitácora: {
+    titulo: 'Bitácora de auditoría',
+    descripcion: 'Registro de acciones realizadas por los usuarios del sistema.',
+    columnas: ['Fecha y hora', 'Usuario', 'Acción', 'Entidad', 'Detalle'],
+    filas: [
+      [
+        '15 nov 2026 · 10:42',
+        'Ana López',
+        'Justificación registrada',
+        'PER-2026-084',
+        '4 faltas justificadas',
+      ],
+      [
+        '15 nov 2026 · 10:18',
+        'Luis Martínez',
+        'Enrolamiento actualizado',
+        '202510492',
+        'Captura facial renovada',
+      ],
+      [
+        '14 nov 2026 · 16:05',
+        'Ana López',
+        'Periodo modificado',
+        'Semestre 2026-2',
+        'Cupo Cafetería 1: 500',
+      ],
+    ],
+    icono: 'bitacora',
+    accion: 'Exportar bitácora',
+  },
+};
+
+export const ENTREGAS_DESAYUNO = [
+  { nombre: 'Cafetería 1', count: 128, total: 160, color: 'bg-primario' },
+  { nombre: 'Cafetería 2', count: 96, total: 140, color: 'bg-acento' },
+];
+
+export const ENTREGAS_COMIDA = [
+  { nombre: 'Cafetería 1', count: 264, total: 320, color: 'bg-primario' },
+  { nombre: 'Cafetería 2', count: 198, total: 280, color: 'bg-acento' },
+];

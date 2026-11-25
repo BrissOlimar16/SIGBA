@@ -1,0 +1,75 @@
+<div class="mx-auto max-w-4xl space-y-6">
+  <a
+    routerLink="/admin/alumnos"
+    class="flex items-center gap-2 text-sm font-semibold text-primario"
+  >
+    <app-icono nombre="izquierda" [tamano]="17" />{{ MENSAJES.alumnos.volver }}
+  </a>
+
+  <div
+    class="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4"
+  >
+    @for (paso of pasos; track paso; let indice = $index) {
+      <div class="flex items-center gap-3">
+        <span
+          class="grid size-9 place-items-center rounded-full text-sm font-bold"
+          [class]="
+            pasoActivo() === indice ? 'bg-primario text-white' : 'bg-primario-tinte text-primario'
+          "
+        >
+          {{ indice + 1 }}
+        </span>
+        <span class="text-sm font-semibold">{{ paso }}</span>
+        @if (indice < pasos.length - 1) {
+          <span class="mx-2 hidden h-px w-20 bg-borde sm:block"></span>
+        }
+      </div>
+    }
+  </div>
+
+  <app-panel [titulo]="MENSAJES.registro.paseCredencial" subtitulo="Paso 1 · Credencial">
+    <div class="mx-auto max-w-xl p-4 text-center sm:p-8">
+      <app-icono nombre="credencial" [tamano]="52" />
+      <p class="mt-4 text-sm text-texto-suave">{{ MENSAJES.registro.acerqueTarjeta }}</p>
+      <input
+        class="mt-5 h-12 w-full rounded-control border border-borde-control bg-superficie px-4 text-center text-lg tracking-widest outline-none focus:border-primario"
+        type="text"
+        [attr.aria-label]="MENSAJES.registro.codigoCredencial"
+        [placeholder]="MENSAJES.registro.codigoCredencial"
+      />
+      <button
+        type="button"
+        class="mt-4 text-sm font-semibold text-primario hover:underline"
+        (click)="avanzar()"
+      >
+        {{ MENSAJES.registro.sinCredencial }}
+      </button>
+    </div>
+  </app-panel>
+
+  <app-panel [titulo]="MENSAJES.registro.datos">
+    <div class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
+      @for (campo of campos; track campo[0]) {
+        <label class="text-sm font-semibold text-texto">
+          {{ campo[0] }}
+          <input
+            class="mt-1.5 h-10 w-full rounded-control border border-borde-control bg-superficie px-3 font-normal outline-none focus:border-primario"
+            type="text"
+            [value]="campo[1]"
+          />
+        </label>
+      }
+      <p
+        class="flex items-start gap-2 rounded-lg bg-advertencia-tinte p-3 text-sm text-advertencia-texto sm:col-span-2"
+      >
+        <app-icono nombre="alerta" [tamano]="16" />{{ MENSAJES.registro.avisoCupo }}
+      </p>
+    </div>
+    <div class="flex flex-wrap justify-end gap-2 border-t border-borde p-4">
+      <app-boton variante="secundario">{{ MENSAJES.registro.guardar }}</app-boton>
+      <app-boton (activar)="avanzar()">
+        {{ MENSAJES.registro.guardarRostro }}<app-icono nombre="derecha" [tamano]="16" />
+      </app-boton>
+    </div>
+  </app-panel>
+</div>

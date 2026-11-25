@@ -1,59 +1,107 @@
-# Frontend
+# Frontend SIGBA
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.7.
+Maqueta frontend de SIGBA construida con Angular 22, Tailwind CSS 4, TypeScript y Vitest. Es una demostración visual y funcional con datos simulados: **no consume API, no usa `HttpClient`, no guarda información y no implementa autenticación**.
 
-## Development server
+El diseño toma como referencia el prototipo y adapta todas sus pantallas a componentes standalone de Angular. La interfaz, los mensajes y los comentarios de documentación están en español.
 
-To start a local development server, run:
+## Requisitos
 
-```bash
-ng serve
-```
+- Node.js compatible con Angular 22.
+- npm 11 o superior.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Las dependencias se instalan desde `package-lock.json`; no se requieren servicios externos para ejecutar la maqueta.
 
-## Code scaffolding
+## Instalación
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Desde esta carpeta:
 
 ```bash
-ng generate --help
+npm ci
 ```
 
-## Building
+Si no existe `package-lock.json` o se está actualizando deliberadamente el árbol de dependencias, también puede usarse `npm install`.
 
-To build the project run:
+## Ejecutar en desarrollo
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Luego abrir `http://localhost:4200/`.
 
-## Running unit tests
+Rutas principales:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+- `/terminal`: terminal de cafetería.
+- `/admin/inicio`: panel principal.
+- `/admin/alumnos`: directorio de alumnos.
+- `/admin/alumnos/nuevo`: registro de alumno.
+- `/admin/alumnos/:matricula`: ficha de un alumno.
+- `/admin/enrolamiento`: captura facial simulada.
+- `/admin/calendario`: calendario de servicios.
+- `/admin/reportes`: filtros, gráfica y descargas simuladas.
+- `/admin/configuracion`: parámetros del sistema.
+- `/admin/lista-espera`, `/admin/bajas-alertas`, `/admin/casos`, `/admin/justificaciones`, `/admin/periodos`, `/admin/usuarios` y `/admin/bitacora`: vistas de consulta.
+
+La ruta raíz `/` redirige a `/admin/inicio`.
+
+## Qué se puede probar
+
+- En la terminal, escribir una matrícula y presionar Enter. El sufijo define el resultado simulado: `4` aprobado, `5` aviso, `9` sin conexión; cualquier otro valor muestra rechazo. También hay botones para forzar cada estado.
+- En alumnos, buscar por nombre, matrícula o carrera, filtrar por cafetería/estado y abrir la ficha de un alumno.
+- En enrolamiento, marcar el consentimiento y realizar tres capturas simuladas.
+- En calendario, seleccionar días y revisar la leyenda de servicios.
+- En reportes y configuración, usar los filtros y botones para ver mensajes de confirmación simulados.
+
+Todos los datos viven en `src/app/nucleo/datos.ts`. Los textos visibles están centralizados en `src/app/nucleo/mensajes.es.ts`.
+
+## Estructura
+
+```text
+src/app/
+├── nucleo/
+│   ├── datos.ts              # mocks de alumnos, métricas y tablas
+│   ├── mensajes.es.ts        # todos los textos de la interfaz
+│   ├── modelos.ts            # tipos compartidos
+│   └── iconos/icono.ts       # iconos SVG locales
+├── compartido/interfaz/      # shell, botones, paneles, tablas y distintivos
+├── caracteristicas/          # una carpeta por pantalla o grupo de pantallas
+├── app.routes.ts             # rutas perezosas
+└── app.ts / app.html         # punto de entrada visual
+```
+
+No se usa Angular Material. Los iconos son SVG locales definidos en `icono.ts`: `lucide-angular` no puede instalarse con Angular 22 porque declara soporte hasta Angular 21. La fuente Inter se sirve desde el paquete `@fontsource-variable/inter`, sin CDN.
+
+## Compilar
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+El resultado se genera en `dist/frontend`.
 
-For end-to-end (e2e) testing, run:
+## Pruebas y calidad
 
 ```bash
-ng e2e
+npm test -- --watch=false
+npx prettier --check .
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Para aplicar formato automáticamente:
 
-## Additional Resources
+```bash
+npx prettier --write .
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+No hay pruebas end-to-end configuradas.
+
+## Solución de problemas
+
+Si la compilación falla con `ERR_MODULE_NOT_FOUND` o con un paquete incompleto en `node_modules`, reinstalar desde el lockfile:
+
+```bash
+npm ci
+```
+
+## Alcance
+
+Este README documenta únicamente el frontend. La API, la base de datos, los contenedores y el despliegue se documentan en el README principal del repositorio.

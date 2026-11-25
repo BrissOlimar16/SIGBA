@@ -1,0 +1,144 @@
+<div class="space-y-5">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-lg font-bold text-texto">{{ MENSAJES.alumnos.directorio }}</h2>
+      <p class="mt-1 text-sm text-texto-suave">{{ MENSAJES.alumnos.descripcion }}</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <app-boton variante="secundario"
+        ><app-icono nombre="subir" [tamano]="16" />{{ MENSAJES.alumnos.importar }}</app-boton
+      >
+      <a
+        routerLink="/admin/alumnos/nuevo"
+        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-control bg-primario px-4 text-sm font-semibold text-white hover:bg-primario-oscuro"
+      >
+        <app-icono nombre="mas" [tamano]="16" />{{ MENSAJES.alumnos.registrar }}
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-col gap-3 rounded-tarjeta border border-borde bg-superficie p-4 shadow-card lg:flex-row lg:items-center"
+  >
+    <label class="relative min-w-0 flex-1">
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-texto-suave"
+        ><app-icono nombre="buscar" [tamano]="17"
+      /></span>
+      <input
+        type="search"
+        class="h-10 w-full rounded-control border border-borde-control bg-superficie pl-10 pr-3 text-sm outline-none focus:border-primario"
+        [attr.aria-label]="MENSAJES.alumnos.buscar"
+        [placeholder]="MENSAJES.alumnos.buscar"
+        [value]="consulta()"
+        (input)="actualizarConsulta($event)"
+      />
+    </label>
+    <select
+      class="h-10 rounded-control border border-borde-control bg-superficie px-3 text-sm text-texto"
+      aria-label="Filtrar por cafetería"
+      [value]="cafeteria()"
+      (change)="actualizarCafeteria($event)"
+    >
+      @for (opcion of cafeterias; track opcion) {
+        <option>{{ opcion }}</option>
+      }
+    </select>
+    <select
+      class="h-10 rounded-control border border-borde-control bg-superficie px-3 text-sm text-texto"
+      aria-label="Filtrar por estado"
+      [value]="estado()"
+      (change)="actualizarEstado($event)"
+    >
+      @for (opcion of estados; track opcion) {
+        <option>{{ opcion }}</option>
+      }
+    </select>
+    <app-boton variante="secundario"
+      ><app-icono nombre="filtros" [tamano]="16" />{{ MENSAJES.alumnos.masFiltros }}</app-boton
+    >
+  </div>
+
+  <app-panel [titulo]="'Alumnos (' + visibles().length + ')'">
+    <div accion class="flex items-center gap-1 text-sm font-semibold text-texto-suave">
+      <app-icono nombre="descargar" [tamano]="16" />{{ MENSAJES.alumnos.exportar }}
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[860px] text-left">
+        <thead class="bg-fondo text-[11px] uppercase tracking-wider text-texto-suave">
+          <tr>
+            <th class="px-5 py-3 font-bold">Matrícula</th>
+            <th class="px-5 py-3 font-bold">Alumno</th>
+            <th class="px-5 py-3 font-bold">Carrera</th>
+            <th class="px-5 py-3 font-bold">Cafetería</th>
+            <th class="px-5 py-3 font-bold">Estado</th>
+            <th class="px-5 py-3 font-bold">Faltas</th>
+            <th class="px-5 py-3 font-bold">Rostro</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-borde">
+          @for (alumno of visibles(); track alumno.matricula) {
+            <tr
+              class="cursor-pointer hover:bg-fondo"
+              routerLink="/admin/alumnos/{{ alumno.matricula }}"
+            >
+              <td class="whitespace-nowrap px-5 py-4 text-sm font-semibold text-texto">
+                {{ alumno.matricula }}
+              </td>
+              <td class="whitespace-nowrap px-5 py-4 text-sm text-texto">{{ alumno.nombre }}</td>
+              <td class="whitespace-nowrap px-5 py-4 text-sm text-texto-suave">
+                {{ alumno.carrera }}
+              </td>
+              <td class="whitespace-nowrap px-5 py-4 text-sm text-texto-suave">
+                {{ alumno.cafeteria }}
+              </td>
+              <td class="px-5 py-4">
+                <app-distintivo-estado [tipo]="tipoEstado(alumno.estado)">{{
+                  alumno.estado
+                }}</app-distintivo-estado>
+              </td>
+              <td class="px-5 py-4">
+                <div class="flex items-center gap-2 text-sm font-semibold text-texto">
+                  <span>{{ alumno.faltas }}/6</span>
+                  <span class="h-2 w-16 overflow-hidden rounded-full bg-fondo">
+                    <span
+                      class="block h-full rounded-full bg-advertencia"
+                      [style.width.%]="(alumno.faltas / 6) * 100"
+                    ></span>
+                  </span>
+                </div>
+              </td>
+              <td class="px-5 py-4 text-sm">
+                <span [class]="alumno.rostro ? 'text-exito-texto' : 'text-error-texto'">
+                  <app-icono [nombre]="alumno.rostro ? 'correcto' : 'incorrecto'" [tamano]="18" />
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="px-5 py-10 text-center text-sm text-texto-suave" colspan="7">
+                No hay alumnos que coincidan.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="flex flex-col gap-3 border-t border-borde px-5 py-3 text-xs text-texto-suave sm:flex-row sm:items-center sm:justify-between"
+    >
+      <span>{{ MENSAJES.alumnos.mostrando }}</span>
+      <div class="flex items-center gap-2">
+        <app-boton variante="fantasma">{{ MENSAJES.alumnos.anterior }}</app-boton>
+        <span
+          class="grid size-8 place-items-center rounded-control bg-primario font-semibold text-white"
+          >1</span
+        >
+        <span class="grid size-8 place-items-center rounded-control border border-borde">2</span>
+        <span class="grid size-8 place-items-center rounded-control border border-borde">3</span>
+        <span>…</span>
+        <span class="grid size-8 place-items-center rounded-control border border-borde">125</span>
+        <app-boton variante="fantasma">{{ MENSAJES.alumnos.siguiente }}</app-boton>
+      </div>
+    </div>
+  </app-panel>
+</div>
